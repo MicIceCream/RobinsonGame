@@ -32,12 +32,19 @@
         android:layout_gravity="center"
         android:id="@+id/etName"
         />
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spCharacters"
+        />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Начать"
         android:id="@+id/btnStart"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

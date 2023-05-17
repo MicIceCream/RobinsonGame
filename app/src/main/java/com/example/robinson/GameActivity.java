@@ -1,8 +1,12 @@
 package com.example.robinson;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,7 +17,7 @@ import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends FragmentActivity {
 
     Button btnAct1;
     Button btnAct2;
@@ -21,12 +25,23 @@ public class GameActivity extends AppCompatActivity {
     Button btnEndGame;
     Button btnSkip;
 
+    Button btnMap;
+    Button btnBio, btnAction;
+
     TextView tvName;
     TextView tvStage;
     TextView tvContain;
     TextView tvFood;
     TextView tvWater;
     TextView tvMaterials;
+
+    FragmentTransaction ft;
+    FragmentManager fm;
+    BioFragment bioFragment;
+    ActionFragment actionFragment;
+
+    androidx.fragment.app.Fragment currentFragment;
+
 
     Player player;
     Day day = new Day();
@@ -37,7 +52,15 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        player = new Player(getIntent().getStringExtra("name"));
+        bioFragment = new BioFragment();
+        actionFragment = new ActionFragment();
+
+        fm = getSupportFragmentManager();
+        ft = fm.beginTransaction();
+        ft.replace(R.id.lnFragment1, actionFragment);
+        ft.commit();
+
+        player = new Player(getIntent().getStringExtra("name"), new Character("Робин", "Программист", 23, 1, 1, 1, 1) );
 
         tvName = findViewById(R.id.tvName);
         tvContain = findViewById(R.id.tvContain);
@@ -46,10 +69,15 @@ public class GameActivity extends AppCompatActivity {
         tvMaterials = findViewById(R.id.tvMaterials);
         tvStage = findViewById(R.id.tvStage);
 
-        btnAct1 = findViewById(R.id.btnAct1);
-        btnAct2 = findViewById(R.id.btnAct2);
-        btnAct3 = findViewById(R.id.btnAct3);
+        btnBio = findViewById(R.id.btnBio);
+        btnAction = findViewById(R.id.btnAction);
 
+
+
+//        btnMap = findViewById(R.id.btnMap);
+//        btnAct1 = findViewById(R.id.btnAct1);
+//        btnAct2 = findViewById(R.id.btnAct2);
+//        btnAct3 = findViewById(R.id.btnAct3);
 
         tvStage.setText("Утро");
         tvFood.setText("Еда: " + player.getFood());
@@ -58,99 +86,137 @@ public class GameActivity extends AppCompatActivity {
 
         tvName.setText("   " + player.name);
 
-        btnEndGame = findViewById(R.id.btnEndGame);
-        btnSkip = findViewById(R.id.btnSkip);
-        btnEndGame.setEnabled(false);
+//        btnEndGame = findViewById(R.id.btnEndGame);
+//        btnSkip = findViewById(R.id.btnSkip);
+//        btnEndGame.setEnabled(false);
 
         day.nextStage(player);
-        checkActions();
-        btnAct1.setText(day.action1.name);
-        btnAct2.setText(day.action2.name);
-        btnAct3.setText(day.action3.name);
-
-        btnSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupOnClickListener(day.skipAction);
-            }
-        });
-
-        btnEndGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
 
-        btnAct1.setOnClickListener(new View.OnClickListener() {
+        btnAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setupOnClickListener(day.action1);
+                replaceFragment(actionFragment);
             }
         });
-        btnAct2.setOnClickListener(new View.OnClickListener() {
+        btnBio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setupOnClickListener(day.action2);
+//                replaceFragment(bioFragment);
+                Bundle bundle = new Bundle();
+                bundle.putString("name", player.character.name);
+                bundle.putString("profession", player.character.profession);
+                bundle.putInt("age", player.character.age);
+                bundle.putString("mood", player.currentMood.name);
+                bioFragment.setArguments(bundle);
+                ft = fm.beginTransaction();
+                ft.replace(R.id.lnFragment1, bioFragment);
+                ft.commit();
             }
         });
-        btnAct3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setupOnClickListener(day.action3);
-            }
-        });
+
+
+
+//        checkActions();
+//        btnAct1.setText(day.action1.name);
+//        btnAct2.setText(day.action2.name);
+//        btnAct3.setText(day.action3.name);
+
+//        btnSkip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setupOnClickListener(day.skipAction);
+//            }
+//        });
+
+//        btnEndGame.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                finish();
+//            }
+//        });
+//
+//
+//        btnAct1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setupOnClickListener(day.action1);
+//            }
+//        });
+//        btnAct2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setupOnClickListener(day.action2);
+//            }
+//        });
+//        btnAct3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setupOnClickListener(day.action3);
+//            }
+//        });
+//        btnMap.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent j = new Intent(GameActivity.this, MainActivity.class);
+//                j.putExtra("player", player.map.locations);
+//            }
+//        });
     }
 
-    public void setupOnClickListener(Action action) {
-
-
-        player.chooseAction(action);
-
-        tvContain.setText(action.contain);
-        day.nextStage(player);
-
-        if (day.stage == 0)
-            Toast.makeText(GameActivity.this, "День " + player.daySurvived, Toast.LENGTH_SHORT).show();
-        btnAct1.setText(day.action1.name);
-        btnAct2.setText(day.action2.name);
-        btnAct3.setText(day.action3.name);
-
-        tvStage.setText(day.stage == 0 ? "Утро" : "Вечер");
-
-        tvFood.setText("Еда: " + player.getFood());
-        tvWater.setText("Вода: " + player.getWater());
-        tvMaterials.setText("Материалы: " + player.materials);
-
-        if (action.name.equals("Построить лодку")) {
-            endGame();
-            Toast.makeText(this, "Игра завершена! Вы уплыли с острова!", Toast.LENGTH_LONG).show();
-        } else
-        if (player.food <= 0 || player.water <= 0) {
-        endGame();
-        Toast.makeText(this, "Игра завершена. Вы умерли(", Toast.LENGTH_LONG).show();
-        } else
-            if (player.daySurvived > 60) {
-                endGame();
-                tvContain.setText("Просыпаясь в очередной унылый день, вы замечаете корабль вдалеке. Через пару часов вас подобрали спасатели");
-                Toast.makeText(this, "Игра завершена. Вы дождались спасателей!", Toast.LENGTH_LONG).show();
-            } else
-            checkActions();
-    }
-
-    void endGame() {
-            btnAct1.setEnabled(false);
-            btnAct2.setEnabled(false);
-            btnAct3.setEnabled(false);
-            btnSkip.setEnabled(false);
-            btnEndGame.setEnabled(true);
-    }
-
-    public void checkActions() {
-            btnAct1.setEnabled(day.action1.changedMaterials >= 0 || player.materials + day.action1.changedMaterials >= 0);
-            btnAct2.setEnabled(day.action2.changedMaterials >= 0 || player.materials + day.action2.changedMaterials >= 0);
-            btnAct3.setEnabled(day.action3.changedMaterials >= 0 || player.materials + day.action3.changedMaterials >= 0);
+//    public void setupOnClickListener(Action action) {
+//
+//
+//        player.chooseAction(action);
+//
+//        tvContain.setText(action.contain);
+//        day.nextStage(player);
+//
+//        if (day.stage == 0)
+//            Toast.makeText(GameActivity.this, "День " + player.daySurvived, Toast.LENGTH_SHORT).show();
+//        btnAct1.setText(day.action1.name);
+//        btnAct2.setText(day.action2.name);
+//        btnAct3.setText(day.action3.name);
+//
+//        tvStage.setText(day.stage == 0 ? "Утро" : "Вечер");
+//
+//        tvFood.setText("Еда: " + player.getFood());
+//        tvWater.setText("Вода: " + player.getWater());
+//        tvMaterials.setText("Материалы: " + player.materials);
+//
+//        if (action.name.equals("Построить лодку")) {
+//            endGame();
+//            Toast.makeText(this, "Игра завершена! Вы уплыли с острова!", Toast.LENGTH_LONG).show();
+//        } else
+//        if (player.food <= 0 || player.water <= 0) {
+//        endGame();
+//        Toast.makeText(this, "Игра завершена. Вы умерли(", Toast.LENGTH_LONG).show();
+//        } else
+//            if (player.daySurvived > 60) {
+//                endGame();
+//                tvContain.setText("Просыпаясь в очередной унылый день, вы замечаете корабль вдалеке. Через пару часов вас подобрали спасатели");
+//                Toast.makeText(this, "Игра завершена. Вы дождались спасателей!", Toast.LENGTH_LONG).show();
+//            } else
+//            checkActions();
+//    }
+//
+//    void endGame() {
+//            btnAct1.setEnabled(false);
+//            btnAct2.setEnabled(false);
+//            btnAct3.setEnabled(false);
+//            btnSkip.setEnabled(false);
+//            btnEndGame.setEnabled(true);
+//    }
+//
+//    public void checkActions() {
+//            btnAct1.setEnabled(day.action1.changedMaterials >= 0 || player.materials + day.action1.changedMaterials >= 0);
+//            btnAct2.setEnabled(day.action2.changedMaterials >= 0 || player.materials + day.action2.changedMaterials >= 0);
+//            btnAct3.setEnabled(day.action3.changedMaterials >= 0 || player.materials + day.action3.changedMaterials >= 0);
+// }
+    void replaceFragment(androidx.fragment.app.Fragment fragment) {
+        ft = fm.beginTransaction();
+        ft.replace(R.id.lnFragment1, fragment);
+        ft.commit();
     }
 
 }
