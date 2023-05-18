@@ -23,12 +23,13 @@ public class Player {
         water = 100;
         materials = 0;
 
+        moodList = new ArrayList<>();
         moodList.add(new Mood("Счастлив", 140, 140));
         moodList.add(new Mood("Спокоен", 100, 100));
         moodList.add(new Mood("Грустный", 80, 90));
         moodList.add(new Mood("Разбитость", 50, 60));
 
-        currentMood = moodList.get(1);
+        currentMood = new Mood("Спокоен", 100, 100);
 
         map = new Map();
         this.character = character;

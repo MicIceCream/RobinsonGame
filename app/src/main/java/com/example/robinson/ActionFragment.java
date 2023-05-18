@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +59,15 @@ public class ActionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_action, container, false);
+        View v = inflater.inflate(R.layout.fragment_action, null);
+        TextView tvAct1 = (TextView) v.findViewById(R.id.tvAct1);
+        TextView tvAct2 = (TextView) v.findViewById(R.id.tvAct2);
+        TextView tvAct3 = (TextView) v.findViewById(R.id.tvAct3);
+
+        tvAct1.setText(getArguments().getString("action1"));
+        tvAct2.setText(getArguments().getString("action2"));
+        tvAct3.setText(getArguments().getString("action3"));
+
+        return v;
     }
 }

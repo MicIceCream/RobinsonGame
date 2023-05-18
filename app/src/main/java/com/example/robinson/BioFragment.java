@@ -71,7 +71,7 @@ public class BioFragment extends Fragment {
         tvCharMood.setText(getArguments().getString("mood"));
         tvCharName.setText(getArguments().getString("name"));
         tvCharProfession.setText(getArguments().getString("profession"));
-        tvCharAge.setText(getArguments().getInt("age") + "");
+        tvCharAge.setText(getArguments().getString("age"));
         return v;
     }
 }

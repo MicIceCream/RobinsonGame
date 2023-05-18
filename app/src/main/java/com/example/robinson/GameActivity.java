@@ -56,9 +56,6 @@ public class GameActivity extends FragmentActivity {
         actionFragment = new ActionFragment();
 
         fm = getSupportFragmentManager();
-        ft = fm.beginTransaction();
-        ft.replace(R.id.lnFragment1, actionFragment);
-        ft.commit();
 
         player = new Player(getIntent().getStringExtra("name"), new Character("Робин", "Программист", 23, 1, 1, 1, 1) );
 
@@ -91,6 +88,14 @@ public class GameActivity extends FragmentActivity {
 //        btnEndGame.setEnabled(false);
 
         day.nextStage(player);
+        Bundle bundle = new Bundle();
+        bundle.putString("action1", day.action1.name);
+        bundle.putString("action2", day.action2.name);
+        bundle.putString("action3", day.action3.name);
+        actionFragment.setArguments(bundle);
+
+        replaceFragment(actionFragment);
+
 
 
         btnAction.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +111,7 @@ public class GameActivity extends FragmentActivity {
                 Bundle bundle = new Bundle();
                 bundle.putString("name", player.character.name);
                 bundle.putString("profession", player.character.profession);
-                bundle.putInt("age", player.character.age);
+                bundle.putString("age", player.character.age + "");
                 bundle.putString("mood", player.currentMood.name);
                 bioFragment.setArguments(bundle);
                 ft = fm.beginTransaction();
