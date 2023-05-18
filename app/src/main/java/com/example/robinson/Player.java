@@ -8,6 +8,7 @@ public class Player {
     int food;
     int water;
     int materials;
+    int health;
     int daySurvived = 0;
     int workAmplifier, hungerAmplifier, thirstAmplifier, healthAmplifier;
     Map map;
@@ -22,6 +23,7 @@ public class Player {
         food = 100;
         water = 100;
         materials = 0;
+        health = 100;
 
         moodList = new ArrayList<>();
         moodList.add(new Mood("Счастлив", 140, 140));
@@ -71,9 +73,14 @@ public class Player {
     }
 
     void chooseAction(Action action) {
-        food += action.changedFood * (character.hungerAmplifier / 100);
-        water += action.changedWater * (character.thirstAmplifier / 100);
-        materials += action.changedMaterials * (character.workAmplifier / 100);
+        if (action != null) {
+            food += action.changedFood * (hungerAmplifier / 100);
+            water += action.changedWater * (thirstAmplifier / 100);
+            materials += action.changedMaterials * (workAmplifier / 100);
+            health -= healthAmplifier;
+        }
+        else health += healthAmplifier * 2;
+
     }
 
     String getFood() {

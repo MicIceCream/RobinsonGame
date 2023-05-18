@@ -8,7 +8,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_weight="2"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_weight="10"
@@ -42,6 +42,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="[cost]"
+                        android:id="@+id/tvCost1"
                         android:layout_gravity="center"
                         android:layout_weight="4"
                         android:textSize="20sp"/>
@@ -75,6 +76,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="[cost]"
+                        android:id="@+id/tvCost2"
                         android:layout_gravity="center"
                         android:layout_weight="4"
                         android:textSize="20sp"/>
@@ -82,6 +84,7 @@
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnAct2"
                     android:background="@android:drawable/ic_input_add"
                     />
             </LinearLayout>
@@ -107,15 +110,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="[cost]"
+                        android:id="@+id/tvCost3"
                         android:layout_gravity="center"
                         android:layout_weight="4"
                         android:textSize="20sp"/>
                 </LinearLayout>
+
                 <ImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/btnAct3"
                     android:background="@android:drawable/ic_input_add"
                     />
+
             </LinearLayout>
 
 
@@ -125,7 +132,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_weight="2"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"/>
 
 <!--        <LinearLayout-->
 <!--            android:layout_width="match_parent"-->

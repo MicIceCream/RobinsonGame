@@ -7,7 +7,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +41,14 @@ public class ActionFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment ActionFragment.
      */
+
+
+    // https://developer.alexanderklimov.ru/android/fragment2.php
+    // Здесь можно поискать инфу о фрагментах, не забудь!
+
+
+
+
     // TODO: Rename and change types and number of parameters
     public static ActionFragment newInstance(String param1, String param2) {
         ActionFragment fragment = new ActionFragment();
@@ -59,14 +71,44 @@ public class ActionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_action, null);
+        View v = inflater.inflate(R.layout.fragment_action, container, false);
         TextView tvAct1 = (TextView) v.findViewById(R.id.tvAct1);
         TextView tvAct2 = (TextView) v.findViewById(R.id.tvAct2);
         TextView tvAct3 = (TextView) v.findViewById(R.id.tvAct3);
+        TextView tvCost1 = (TextView) v.findViewById(R.id.tvCost1);
+        TextView tvCost2 = (TextView) v.findViewById(R.id.tvCost2);
+        TextView tvCost3 = (TextView) v.findViewById(R.id.tvCost3);
 
-        tvAct1.setText(getArguments().getString("action1"));
-        tvAct2.setText(getArguments().getString("action2"));
-        tvAct3.setText(getArguments().getString("action3"));
+        ImageButton btnAct1 = (ImageButton) v.findViewById(R.id.btnAct1);
+        ImageButton btnAct2 = (ImageButton) v.findViewById(R.id.btnAct2);
+        ImageButton btnAct3 = (ImageButton) v.findViewById(R.id.btnAct3);
+
+        tvAct1.setText(getArguments().getString("act1"));
+        tvAct2.setText(getArguments().getString("act2"));
+        tvAct3.setText(getArguments().getString("act3"));
+        tvCost1.setText(getArguments().getString("cost1"));
+        tvCost2.setText(getArguments().getString("cost2"));
+        tvCost3.setText(getArguments().getString("cost3"));
+
+        btnAct1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Работает?", Toast.LENGTH_SHORT).show();
+            }
+        });
+        btnAct2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Кажется, работает.", Toast.LENGTH_SHORT).show();
+            }
+        });
+        btnAct3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Точно работает!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
         return v;
     }

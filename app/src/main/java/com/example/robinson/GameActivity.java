@@ -89,21 +89,30 @@ public class GameActivity extends FragmentActivity {
 
         day.nextStage(player);
         Bundle bundle = new Bundle();
-        bundle.putString("action1", day.action1.name);
-        bundle.putString("action2", day.action2.name);
-        bundle.putString("action3", day.action3.name);
-        actionFragment.setArguments(bundle);
-
-        replaceFragment(actionFragment);
-
+        bundle.putString("act1", day.action1.name);
+        bundle.putString("act2", day.action2.name);
+        bundle.putString("act3", day.action3.name);
+        bundle.putString("cost1",getActionCost(day.action1));
+        bundle.putString("cost2",getActionCost(day.action2));
+        bundle.putString("cost3",getActionCost(day.action3));
+        replaceFragment(actionFragment, bundle);
 
 
         btnAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                replaceFragment(actionFragment);
+                Bundle b = new Bundle();
+                b.putString("act1", day.action1.name);
+                b.putString("act2", day.action2.name);
+                b.putString("act3", day.action3.name);
+                b.putString("cost1",getActionCost(day.action1));
+                b.putString("cost2",getActionCost(day.action2));
+                b.putString("cost3",getActionCost(day.action3));
+                replaceFragment(actionFragment, b);
             }
         });
+
+
         btnBio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,10 +122,7 @@ public class GameActivity extends FragmentActivity {
                 bundle.putString("profession", player.character.profession);
                 bundle.putString("age", player.character.age + "");
                 bundle.putString("mood", player.currentMood.name);
-                bioFragment.setArguments(bundle);
-                ft = fm.beginTransaction();
-                ft.replace(R.id.lnFragment1, bioFragment);
-                ft.commit();
+                replaceFragment(bioFragment, bundle);
             }
         });
 
@@ -169,59 +175,62 @@ public class GameActivity extends FragmentActivity {
 //        });
     }
 
-//    public void setupOnClickListener(Action action) {
-//
-//
-//        player.chooseAction(action);
-//
-//        tvContain.setText(action.contain);
-//        day.nextStage(player);
-//
-//        if (day.stage == 0)
-//            Toast.makeText(GameActivity.this, "День " + player.daySurvived, Toast.LENGTH_SHORT).show();
-//        btnAct1.setText(day.action1.name);
-//        btnAct2.setText(day.action2.name);
-//        btnAct3.setText(day.action3.name);
-//
-//        tvStage.setText(day.stage == 0 ? "Утро" : "Вечер");
-//
-//        tvFood.setText("Еда: " + player.getFood());
-//        tvWater.setText("Вода: " + player.getWater());
-//        tvMaterials.setText("Материалы: " + player.materials);
-//
-//        if (action.name.equals("Построить лодку")) {
-//            endGame();
-//            Toast.makeText(this, "Игра завершена! Вы уплыли с острова!", Toast.LENGTH_LONG).show();
-//        } else
-//        if (player.food <= 0 || player.water <= 0) {
-//        endGame();
-//        Toast.makeText(this, "Игра завершена. Вы умерли(", Toast.LENGTH_LONG).show();
-//        } else
-//            if (player.daySurvived > 60) {
-//                endGame();
-//                tvContain.setText("Просыпаясь в очередной унылый день, вы замечаете корабль вдалеке. Через пару часов вас подобрали спасатели");
-//                Toast.makeText(this, "Игра завершена. Вы дождались спасателей!", Toast.LENGTH_LONG).show();
-//            } else
-//            checkActions();
-//    }
-//
-//    void endGame() {
-//            btnAct1.setEnabled(false);
-//            btnAct2.setEnabled(false);
-//            btnAct3.setEnabled(false);
-//            btnSkip.setEnabled(false);
-//            btnEndGame.setEnabled(true);
-//    }
-//
-//    public void checkActions() {
-//            btnAct1.setEnabled(day.action1.changedMaterials >= 0 || player.materials + day.action1.changedMaterials >= 0);
-//            btnAct2.setEnabled(day.action2.changedMaterials >= 0 || player.materials + day.action2.changedMaterials >= 0);
-//            btnAct3.setEnabled(day.action3.changedMaterials >= 0 || player.materials + day.action3.changedMaterials >= 0);
-// }
-    void replaceFragment(androidx.fragment.app.Fragment fragment) {
+    public void setupOnClickListener(Action action) {
+
+
+        player.chooseAction(action);
+
+        tvContain.setText(action.contain);
+        day.nextStage(player);
+
+        if (day.stage == 0)
+            Toast.makeText(GameActivity.this, "День " + player.daySurvived, Toast.LENGTH_SHORT).show();
+        btnAct1.setText(day.action1.name);
+        btnAct2.setText(day.action2.name);
+        btnAct3.setText(day.action3.name);
+
+        tvStage.setText(day.stage == 0 ? "Утро" : "Вечер");
+
+        tvFood.setText("Еда: " + player.getFood());
+        tvWater.setText("Вода: " + player.getWater());
+        tvMaterials.setText("Материалы: " + player.materials);
+
+        if (action.name.equals("Построить лодку")) {
+            endGame();
+            Toast.makeText(this, "Игра завершена! Вы уплыли с острова!", Toast.LENGTH_LONG).show();
+        } else
+        if (player.food <= 0 || player.water <= 0) {
+        endGame();
+        Toast.makeText(this, "Игра завершена. Вы умерли(", Toast.LENGTH_LONG).show();
+        } else
+            if (player.daySurvived > 60) {
+                endGame();
+                tvContain.setText("Просыпаясь в очередной унылый день, вы замечаете корабль вдалеке. Через пару часов вас подобрали спасатели");
+                Toast.makeText(this, "Игра завершена. Вы дождались спасателей!", Toast.LENGTH_LONG).show();
+            } else
+            checkActions();
+    }
+
+    void endGame() {
+            btnAct1.setEnabled(false);
+            btnAct2.setEnabled(false);
+            btnAct3.setEnabled(false);
+            btnSkip.setEnabled(false);
+            btnEndGame.setEnabled(true);
+    }
+
+    public void checkActions() {
+            btnAct1.setEnabled(day.action1.changedMaterials >= 0 || player.materials + day.action1.changedMaterials >= 0);
+            btnAct2.setEnabled(day.action2.changedMaterials >= 0 || player.materials + day.action2.changedMaterials >= 0);
+            btnAct3.setEnabled(day.action3.changedMaterials >= 0 || player.materials + day.action3.changedMaterials >= 0);
+ }
+    void replaceFragment(androidx.fragment.app.Fragment fragment, Bundle b) {
+        fragment.setArguments(b);
         ft = fm.beginTransaction();
         ft.replace(R.id.lnFragment1, fragment);
         ft.commit();
     }
-
+    String getActionCost(Action action) {
+        return "Еда: " + action.changedFood + " Вода: " + action.changedWater + " Материалы: " + action.changedMaterials;
+    }
 }
