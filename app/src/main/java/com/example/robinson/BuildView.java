@@ -7,14 +7,17 @@ import android.view.SurfaceView;
 public class BuildView extends SurfaceView implements SurfaceHolder.Callback {
 
     private DrawThread drawThread;
+    int workAmplifier;
+    int timeLine;
 
-    public BuildView(Context context) {
+    public BuildView(Context context, int a) {
         super(context);
         getHolder().addCallback(this);
+        workAmplifier = a;
     }
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-    drawThread = new DrawThread(getContext(),getHolder());
+    drawThread = new DrawThread(getContext(),getHolder(), workAmplifier);
     drawThread.start();
     }
     @Override
@@ -23,7 +26,7 @@ public class BuildView extends SurfaceView implements SurfaceHolder.Callback {
     }
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-    drawThread.requestStop();
+        drawThread.requestStop();
     }
 
     @Override

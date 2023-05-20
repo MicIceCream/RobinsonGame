@@ -57,7 +57,7 @@ public class GameActivity extends FragmentActivity implements PostMan {
 
         fm = getSupportFragmentManager();
 
-        player = new Player(getIntent().getStringExtra("name"), new Character("Робин", "Программист", 23, 1, 1, 1, 1) );
+        player = new Player(getIntent().getStringExtra("name"), new Character("Робин", "Программист", 23, 100, 1, 1, 1) );
 
         tvName = findViewById(R.id.tvName);
         tvContain = findViewById(R.id.tvContain);
@@ -183,7 +183,9 @@ public class GameActivity extends FragmentActivity implements PostMan {
 
 //        tvContain.setText(action.contain);
         day.nextStage(player);
-        startActivity(new Intent(GameActivity.this, BuildActivity.class));
+        Intent j = new Intent(GameActivity.this, BuildActivity.class);
+        j.putExtra("work", player.workAmplifier + "");
+        startActivity(j);
         Bundle b = new Bundle();
         b.putString("act1", day.action1.name);
         b.putString("act2", day.action2.name);

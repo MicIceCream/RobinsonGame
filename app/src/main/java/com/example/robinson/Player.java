@@ -24,6 +24,10 @@ public class Player {
         water = 100;
         materials = 0;
         health = 100;
+        workAmplifier = character.workAmplifier;
+        hungerAmplifier = character.hungerAmplifier;
+        thirstAmplifier = character.thirstAmplifier;
+        healthAmplifier = character.healthAmplifier;
 
         moodList = new ArrayList<>();
         moodList.add(new Mood("Счастлив", 140, 140));
