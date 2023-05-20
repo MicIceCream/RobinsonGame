@@ -1,5 +1,6 @@
 package com.example.robinson;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -66,7 +67,22 @@ public class ActionFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        try {
+            postMan = (PostMan) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement onSomeEventListener");
+        }
     }
+    PostMan postMan;
+
+//    public void onAttach(Activity activity) {
+//        super.onAttach(activity);
+//        try {
+//            postMan = (PostMan) activity;
+//        } catch (ClassCastException e) {
+//            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+//        }
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,18 +110,22 @@ public class ActionFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Работает?", Toast.LENGTH_SHORT).show();
+//                ((TextView)getActivity().findViewById(R.id.tvMaterials)).setText("Access from Fragment1");
+                postMan.onButtonSelected(1);
             }
         });
         btnAct2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Кажется, работает.", Toast.LENGTH_SHORT).show();
+                postMan.onButtonSelected(2);
             }
         });
         btnAct3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Точно работает!", Toast.LENGTH_SHORT).show();
+                postMan.onButtonSelected(3);
             }
         });
 

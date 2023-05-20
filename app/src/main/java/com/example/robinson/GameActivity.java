@@ -17,7 +17,7 @@ import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class GameActivity extends FragmentActivity {
+public class GameActivity extends FragmentActivity implements PostMan {
 
     Button btnAct1;
     Button btnAct2;
@@ -178,18 +178,28 @@ public class GameActivity extends FragmentActivity {
     public void setupOnClickListener(Action action) {
 
 
+
         player.chooseAction(action);
 
-        tvContain.setText(action.contain);
+//        tvContain.setText(action.contain);
         day.nextStage(player);
+        startActivity(new Intent(GameActivity.this, BuildActivity.class));
+        Bundle b = new Bundle();
+        b.putString("act1", day.action1.name);
+        b.putString("act2", day.action2.name);
+        b.putString("act3", day.action3.name);
+        b.putString("cost1",getActionCost(day.action1));
+        b.putString("cost2",getActionCost(day.action2));
+        b.putString("cost3",getActionCost(day.action3));
+        replaceFragment(actionFragment, b);
 
         if (day.stage == 0)
             Toast.makeText(GameActivity.this, "День " + player.daySurvived, Toast.LENGTH_SHORT).show();
-        btnAct1.setText(day.action1.name);
-        btnAct2.setText(day.action2.name);
-        btnAct3.setText(day.action3.name);
+//        btnAct1.setText(day.action1.name);
+//        btnAct2.setText(day.action2.name);
+//        btnAct3.setText(day.action3.name);
 
-        tvStage.setText(day.stage == 0 ? "Утро" : "Вечер");
+//        tvStage.setText(day.stage == 0 ? "Утро" : "Вечер");
 
         tvFood.setText("Еда: " + player.getFood());
         tvWater.setText("Вода: " + player.getWater());
@@ -212,17 +222,17 @@ public class GameActivity extends FragmentActivity {
     }
 
     void endGame() {
-            btnAct1.setEnabled(false);
-            btnAct2.setEnabled(false);
-            btnAct3.setEnabled(false);
-            btnSkip.setEnabled(false);
-            btnEndGame.setEnabled(true);
+//            btnAct1.setEnabled(false);
+//            btnAct2.setEnabled(false);
+//            btnAct3.setEnabled(false);
+//            btnSkip.setEnabled(false);
+//            btnEndGame.setEnabled(true);
     }
 
     public void checkActions() {
-            btnAct1.setEnabled(day.action1.changedMaterials >= 0 || player.materials + day.action1.changedMaterials >= 0);
-            btnAct2.setEnabled(day.action2.changedMaterials >= 0 || player.materials + day.action2.changedMaterials >= 0);
-            btnAct3.setEnabled(day.action3.changedMaterials >= 0 || player.materials + day.action3.changedMaterials >= 0);
+//            btnAct1.setEnabled(day.action1.changedMaterials >= 0 || player.materials + day.action1.changedMaterials >= 0);
+//            btnAct2.setEnabled(day.action2.changedMaterials >= 0 || player.materials + day.action2.changedMaterials >= 0);
+//            btnAct3.setEnabled(day.action3.changedMaterials >= 0 || player.materials + day.action3.changedMaterials >= 0);
  }
     void replaceFragment(androidx.fragment.app.Fragment fragment, Bundle b) {
         fragment.setArguments(b);
@@ -232,5 +242,19 @@ public class GameActivity extends FragmentActivity {
     }
     String getActionCost(Action action) {
         return "Еда: " + action.changedFood + " Вода: " + action.changedWater + " Материалы: " + action.changedMaterials;
+    }
+
+    @Override
+    public void onButtonSelected(int buttonIndex) {
+        switch (buttonIndex) {
+            case 1:
+                setupOnClickListener(day.action1);
+                break;
+            case 2:
+                setupOnClickListener(day.action2);
+                break;
+            case 3:
+                setupOnClickListener(day.action3);
+        }
     }
 }
