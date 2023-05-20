@@ -1,12 +1,12 @@
 package com.example.robinson;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -54,6 +54,7 @@ public class GameActivity extends FragmentActivity implements PostMan {
 
         bioFragment = new BioFragment();
         actionFragment = new ActionFragment();
+        currentFragment = new Fragment();
 
         fm = getSupportFragmentManager();
 
@@ -88,14 +89,14 @@ public class GameActivity extends FragmentActivity implements PostMan {
 //        btnEndGame.setEnabled(false);
 
         day.nextStage(player);
-        Bundle bundle = new Bundle();
-        bundle.putString("act1", day.action1.name);
-        bundle.putString("act2", day.action2.name);
-        bundle.putString("act3", day.action3.name);
-        bundle.putString("cost1",getActionCost(day.action1));
-        bundle.putString("cost2",getActionCost(day.action2));
-        bundle.putString("cost3",getActionCost(day.action3));
-        replaceFragment(actionFragment, bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putString("act1", day.action1.name);
+//        bundle.putString("act2", day.action2.name);
+//        bundle.putString("act3", day.action3.name);
+//        bundle.putString("cost1",getActionCost(day.action1));
+//        bundle.putString("cost2",getActionCost(day.action2));
+//        bundle.putString("cost3",getActionCost(day.action3));
+//        replaceFragment(actionFragment, bundle);
 
 
         btnAction.setOnClickListener(new View.OnClickListener() {
@@ -237,10 +238,19 @@ public class GameActivity extends FragmentActivity implements PostMan {
 //            btnAct3.setEnabled(day.action3.changedMaterials >= 0 || player.materials + day.action3.changedMaterials >= 0);
  }
     void replaceFragment(androidx.fragment.app.Fragment fragment, Bundle b) {
-        fragment.setArguments(b);
-        ft = fm.beginTransaction();
-        ft.replace(R.id.lnFragment1, fragment);
-        ft.commit();
+        if (currentFragment.equals(fragment)) {
+            ft = fm.beginTransaction();
+            ft.remove(fragment);
+            ft.commit();
+            currentFragment = new Fragment();
+        } else {
+            currentFragment = fragment;
+            fragment.setArguments(b);
+            ft = fm.beginTransaction();
+            ft.replace(R.id.lnFragment1, fragment);
+            ft.commit();
+        }
+
     }
     String getActionCost(Action action) {
         return "Еда: " + action.changedFood + " Вода: " + action.changedWater + " Материалы: " + action.changedMaterials;
