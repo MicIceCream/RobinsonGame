@@ -15,5 +15,4 @@ public class Action {
         this.changedMaterials = changedMaterials;
     }
 
-
 }

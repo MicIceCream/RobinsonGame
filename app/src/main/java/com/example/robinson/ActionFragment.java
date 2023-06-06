@@ -1,6 +1,7 @@
 package com.example.robinson;
 
 import android.app.Activity;
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -105,11 +106,17 @@ public class ActionFragment extends Fragment {
         tvCost1.setText(getArguments().getString("cost1"));
         tvCost2.setText(getArguments().getString("cost2"));
         tvCost3.setText(getArguments().getString("cost3"));
+        if (!getArguments().getBoolean("act1Possible"))
+            tvAct1.setPaintFlags(tvAct1.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        if (!getArguments().getBoolean("act2Possible"))
+            tvAct2.setPaintFlags(tvAct2.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        if (!getArguments().getBoolean("act3Possible"))
+            tvAct3.setPaintFlags(tvAct3.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
         btnAct1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Работает?", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Работает?", Toast.LENGTH_SHORT).show();
 //                ((TextView)getActivity().findViewById(R.id.tvMaterials)).setText("Access from Fragment1");
                 postMan.onButtonSelected(1);
             }
@@ -117,14 +124,14 @@ public class ActionFragment extends Fragment {
         btnAct2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Кажется, работает.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Кажется, работает.", Toast.LENGTH_SHORT).show();
                 postMan.onButtonSelected(2);
             }
         });
         btnAct3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Точно работает!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Точно работает!", Toast.LENGTH_SHORT).show();
                 postMan.onButtonSelected(3);
             }
         });

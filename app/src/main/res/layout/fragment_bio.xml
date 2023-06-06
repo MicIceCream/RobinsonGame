@@ -29,7 +29,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="100sp"/>
+                android:textSize="70sp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -61,6 +61,30 @@
                 android:id="@+id/tvCharMood"
                 android:textColor="@color/black"
                 android:text="[Mood]"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:id="@+id/tvFood"
+                android:textColor="@color/black"
+                android:text="[Food]"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:id="@+id/tvWater"
+                android:textColor="@color/black"
+                android:text="[Water]"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:gravity="center"
+                android:id="@+id/tvMaterials"
+                android:textColor="@color/black"
+                android:text="[Materials]"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -74,14 +98,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
-                    android:text="Day  "
+                    android:text="День  "
                     android:textSize="30sp"
+                    android:textColor="@color/black"
                     android:gravity="right"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="5"
                     android:textSize="30sp"
+                    android:id="@+id/tvDay"
+                    android:textColor="@color/black"
                     android:text="1"/>
             </LinearLayout>
 
@@ -89,6 +116,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="[Morning / evening]"
+                android:id="@+id/tvStage"
+                android:textColor="@color/black"
                 android:textSize="20sp"/>
             <TextView
                 android:layout_width="wrap_content"

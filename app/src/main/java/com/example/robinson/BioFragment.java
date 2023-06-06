@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link BioFragment#newInstance} factory method to
@@ -68,11 +70,21 @@ public class BioFragment extends Fragment {
         TextView tvCharProfession = (TextView) v.findViewById(R.id.tvCharProfession);
         TextView tvCharAge = (TextView) v.findViewById(R.id.tvCharAge);
         TextView tvCharMood = (TextView) v.findViewById(R.id.tvCharMood);
+        TextView tvFood = (TextView) v.findViewById(R.id.tvFood);
+        TextView tvWater = (TextView) v.findViewById(R.id.tvWater);
+        TextView tvMaterials = (TextView) v.findViewById(R.id.tvMaterials);
+        TextView tvDay = (TextView) v.findViewById(R.id.tvDay);
+        TextView tvStage = (TextView) v.findViewById(R.id.tvStage);
 
         tvCharMood.setText(getArguments().getString("mood"));
         tvCharName.setText(getArguments().getString("name"));
         tvCharProfession.setText(getArguments().getString("profession"));
-        tvCharAge.setText(getArguments().getString("age"));
+        tvCharAge.setText("Возраст: " + getArguments().getString("age"));
+        tvFood.setText("Еда: " + getArguments().getString("food"));
+        tvWater.setText("Вода: " + getArguments().getString("water"));
+        tvMaterials.setText("Материалы: " + getArguments().getString("materials"));
+        tvDay.setText(getArguments().getString("day"));
+        tvStage.setText(getArguments().getString("stage"));
         return v;
     }
 }

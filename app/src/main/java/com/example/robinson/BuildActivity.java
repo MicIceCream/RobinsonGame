@@ -15,8 +15,8 @@ public class BuildActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         workAmplifier = Integer.parseInt(getIntent().getStringExtra("work"));
-        setContentView(new BuildView(this, workAmplifier));
-
+        BuildView buildView = new BuildView(this, workAmplifier, this);
+        setContentView(buildView);
     }
 
 }

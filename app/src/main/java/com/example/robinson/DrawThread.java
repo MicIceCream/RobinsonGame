@@ -1,5 +1,6 @@
 package com.example.robinson;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,10 +27,12 @@ public class DrawThread extends Thread {
     ArrayList<PopCircle> deal;
     int j = 1;
     boolean startCircles;
+    Activity c;
+    ArrayList<Integer> positionsX = new ArrayList<>();
+    ArrayList<Integer> positionsY = new ArrayList<>();
 
 
-
-    public DrawThread(Context context, SurfaceHolder surfaceHolder, int a) {
+    public DrawThread(Context context, SurfaceHolder surfaceHolder, int a, Activity b) {
         this.surfaceHolder = surfaceHolder;
         Random random = new Random();
         coconut = BitmapFactory.decodeResource(context.getResources(),R.drawable.pop_coconut);
@@ -43,6 +46,8 @@ public class DrawThread extends Thread {
         waitLine.setColor(Color.RED);
         waitLine.setStyle(Paint.Style.FILL);
         startCircles = true;
+
+        c = b;
     }
     public void requestStop() {
         running = false;
@@ -55,7 +60,13 @@ public class DrawThread extends Thread {
                 Random random = new Random();
                 if (startCircles) {
                     for (int i = 0; i < workAmplifier * 10; i++) {
-                        deal.add(new PopCircle(100 + random.nextInt(canvas.getWidth() - 100), 100 + random.nextInt(canvas.getHeight() - 100), i));
+                        int thisX = random.nextInt((canvas.getWidth() - 1) / 100);
+                        int thisY = random.nextInt((canvas.getHeight() - 1) / 100);
+                        while (positionsX.contains(thisX)) thisX = random.nextInt((canvas.getWidth() - 1) / 100);
+                        positionsX.add(thisX);
+                        while (positionsY.contains(thisY)) thisY = random.nextInt((canvas.getHeight() - 1) / 100);
+                        positionsY.add(thisY);
+                        deal.add(new PopCircle(100 + thisX * 100, 100 + thisY * 100, i));
                     }
                     startCircles = false;
                 }
@@ -66,7 +77,7 @@ public class DrawThread extends Thread {
 //                    canvas.drawBitmap(backgroundHint, 0, 0, waitLine);
                     canvas.drawRect(rectX - 500 + timeLine, canvas.getHeight()-400, rectX + 500 - timeLine, canvas.getHeight()-200, waitLine );
 //                    canvas.drawCircle(x, y, 50, waitLine);
-                    canvas.drawBitmap(coconut, x - coconut.getWidth() / 2, y - coconut.getHeight() / 2, waitLine);
+//                    canvas.drawBitmap(coconut, x - coconut.getWidth() / 2, y - coconut.getHeight() / 2, waitLine);
                     for (int i = 1; i < deal.size(); i++) {
                         PopCircle circle = deal.get(i);
 
@@ -80,13 +91,18 @@ public class DrawThread extends Thread {
                         }
                     }
 
-                    if (j == workAmplifier * 10)
-                        this.stop();
+                    if (j == workAmplifier * 10) {
+                        running = false;
+                        c.finish();
+                    }
+
 
                     if (timeLine < (canvas.getWidth()-100)/2) {
                         timeLine += 1/workAmplifier;
-                    } else
-                        this.stop();
+                    } else {
+                        running = false;
+                        c.finish();
+                    }
                 } finally {
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }

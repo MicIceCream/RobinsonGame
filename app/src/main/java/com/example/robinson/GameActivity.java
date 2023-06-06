@@ -8,37 +8,29 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class GameActivity extends FragmentActivity implements PostMan {
 
-    Button btnAct1;
-    Button btnAct2;
-    Button btnAct3;
-    Button btnEndGame;
-    Button btnSkip;
 
-    Button btnMap;
     Button btnBio, btnAction;
 
-    TextView tvName;
-    TextView tvStage;
-    TextView tvContain;
-    TextView tvFood;
-    TextView tvWater;
-    TextView tvMaterials;
 
     FragmentTransaction ft;
     FragmentManager fm;
     BioFragment bioFragment;
     ActionFragment actionFragment;
+    LinearLayout lnMain;
 
     androidx.fragment.app.Fragment currentFragment;
 
@@ -55,17 +47,11 @@ public class GameActivity extends FragmentActivity implements PostMan {
         bioFragment = new BioFragment();
         actionFragment = new ActionFragment();
         currentFragment = new Fragment();
+        lnMain = findViewById(R.id.lnMain);
 
         fm = getSupportFragmentManager();
 
-        player = new Player(getIntent().getStringExtra("name"), new Character("Робин", "Программист", 23, 100, 1, 1, 1) );
-
-        tvName = findViewById(R.id.tvName);
-        tvContain = findViewById(R.id.tvContain);
-        tvFood = findViewById(R.id.tvFood);
-        tvWater = findViewById(R.id.tvWater);
-        tvMaterials = findViewById(R.id.tvMaterials);
-        tvStage = findViewById(R.id.tvStage);
+        player = new Player(getIntent().getStringExtra("name"), new Character("Глеб", "Программист", 23, 100, 1, 1, 1) );
 
         btnBio = findViewById(R.id.btnBio);
         btnAction = findViewById(R.id.btnAction);
@@ -77,17 +63,9 @@ public class GameActivity extends FragmentActivity implements PostMan {
 //        btnAct2 = findViewById(R.id.btnAct2);
 //        btnAct3 = findViewById(R.id.btnAct3);
 
-        tvStage.setText("Утро");
-        tvFood.setText("Еда: " + player.getFood());
-        tvWater.setText("Вода: " + player.getWater());
-        tvMaterials.setText("Материалы: " + player.materials);
-
-        tvName.setText("   " + player.name);
-
 //        btnEndGame = findViewById(R.id.btnEndGame);
 //        btnSkip = findViewById(R.id.btnSkip);
 //        btnEndGame.setEnabled(false);
-
         day.nextStage(player);
 //        Bundle bundle = new Bundle();
 //        bundle.putString("act1", day.action1.name);
@@ -109,6 +87,9 @@ public class GameActivity extends FragmentActivity implements PostMan {
                 b.putString("cost1",getActionCost(day.action1));
                 b.putString("cost2",getActionCost(day.action2));
                 b.putString("cost3",getActionCost(day.action3));
+                b.putBoolean("act1Possible", isActionPossible(day.action1));
+                b.putBoolean("act2Possible", isActionPossible(day.action2));
+                b.putBoolean("act3Possible", isActionPossible(day.action3));
                 replaceFragment(actionFragment, b);
             }
         });
@@ -123,6 +104,11 @@ public class GameActivity extends FragmentActivity implements PostMan {
                 bundle.putString("profession", player.character.profession);
                 bundle.putString("age", player.character.age + "");
                 bundle.putString("mood", player.currentMood.name);
+                bundle.putString("food", player.food + "");
+                bundle.putString("water", player.water + "");
+                bundle.putString("materials", player.materials + "");
+                bundle.putString("day", player.daySurvived + 1 + "");
+                bundle.putString("stage", day.stage == 0 ? "Утро" : "Вечер");
                 replaceFragment(bioFragment, bundle);
             }
         });
@@ -181,12 +167,11 @@ public class GameActivity extends FragmentActivity implements PostMan {
 
 
         player.chooseAction(action);
-
 //        tvContain.setText(action.contain);
-        day.nextStage(player);
         Intent j = new Intent(GameActivity.this, BuildActivity.class);
         j.putExtra("work", player.workAmplifier + "");
-        startActivity(j);
+        startActivityForResult(j, 1);
+        day.nextStage(player);
         Bundle b = new Bundle();
         b.putString("act1", day.action1.name);
         b.putString("act2", day.action2.name);
@@ -194,19 +179,23 @@ public class GameActivity extends FragmentActivity implements PostMan {
         b.putString("cost1",getActionCost(day.action1));
         b.putString("cost2",getActionCost(day.action2));
         b.putString("cost3",getActionCost(day.action3));
+        b.putBoolean("act1Possible", isActionPossible(day.action1));
+        b.putBoolean("act2Possible", isActionPossible(day.action2));
+        b.putBoolean("act3Possible", isActionPossible(day.action3));
         replaceFragment(actionFragment, b);
+        if (day.stage == 0) {
+//            Toast.makeText(GameActivity.this, "День " + player.daySurvived + 1, Toast.LENGTH_SHORT).show();
+            lnMain.setBackground(getDrawable(R.drawable.sun_theme));
+        } else {
+            lnMain.setBackground(getDrawable(R.drawable.evening_theme));
+        }
 
-        if (day.stage == 0)
-            Toast.makeText(GameActivity.this, "День " + player.daySurvived, Toast.LENGTH_SHORT).show();
 //        btnAct1.setText(day.action1.name);
 //        btnAct2.setText(day.action2.name);
 //        btnAct3.setText(day.action3.name);
 
 //        tvStage.setText(day.stage == 0 ? "Утро" : "Вечер");
 
-        tvFood.setText("Еда: " + player.getFood());
-        tvWater.setText("Вода: " + player.getWater());
-        tvMaterials.setText("Материалы: " + player.materials);
 
         if (action.name.equals("Построить лодку")) {
             endGame();
@@ -218,7 +207,6 @@ public class GameActivity extends FragmentActivity implements PostMan {
         } else
             if (player.daySurvived > 60) {
                 endGame();
-                tvContain.setText("Просыпаясь в очередной унылый день, вы замечаете корабль вдалеке. Через пару часов вас подобрали спасатели");
                 Toast.makeText(this, "Игра завершена. Вы дождались спасателей!", Toast.LENGTH_LONG).show();
             } else
             checkActions();
@@ -260,13 +248,20 @@ public class GameActivity extends FragmentActivity implements PostMan {
     public void onButtonSelected(int buttonIndex) {
         switch (buttonIndex) {
             case 1:
-                setupOnClickListener(day.action1);
+                if (isActionPossible(day.action1))
+                    setupOnClickListener(day.action1);
+
                 break;
             case 2:
+                if (isActionPossible(day.action2))
                 setupOnClickListener(day.action2);
                 break;
             case 3:
+                if (isActionPossible(day.action3))
                 setupOnClickListener(day.action3);
         }
+    }
+    boolean isActionPossible(Action action) {
+        return (player.food > -action.changedFood && player.water > -action.changedWater && player.materials >= -action.changedMaterials);
     }
 }
